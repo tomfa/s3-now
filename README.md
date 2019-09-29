@@ -187,6 +187,28 @@ curl -X POST -H "Authorization: Basic <MY-API-KEY>" \
 s3-now may not quite fit your needs. If it doesn't, simply change it, and 
 deploy it. Our code is your code ❤️
 
+### Install requirements
+```bash
+# Installs python version from .python-version
+pyenv install
+
+# Create virtual environment
+$(pyenv which python) -m venv .venv
+
+# Install dev-dependencies
+source .venv/bin/activate
+pip install -Ur requirements-dev.txt
+```
+
+### Formatting
+s3-now uses [black](https://github.com/psf/black) to prevent fruitless arguments.
+
+Reformat your code with
+
+```bash
+black .
+```
+
 
 ### Deploy any updates
 If you do changes to the code and wish to deploy, simply run:
