@@ -20,15 +20,24 @@ sls config credentials --provider aws
 git clone git@github.com:tomfa/s3-now
 
 # Copy and setup environment variables
-cp dev-template.env .env
+cp env-template.yml env.yml
+```
+### Set environment variables
+Update the `env.yml` file to set consumers and their api keys, in addition to a
+private key that will be used to encrypt JWT tokens.
 
-# Add your private key, can be any string
-echo 'PRIVATE_JWT_KEY=ANY-STRING-DIFFICULT-TO-GUESS' >> .env
+```
+prod:
+  PRIVATE_JWT_TOKEN: "you-should-most-definitely-replace-me"
+  ALLOWED_PROJECTS: "myproject-api-key-123",
 
-# Set allowed projects
-echo 'ALLOWED_PROJECTS=myproject-<MYPROJECT-API-KEY>' >> .env
+default:
+  PRIVATE_JWT_TOKEN: "you-should-replace-me"
+  ALLOWED_PROJECTS: "myproject-api-key-123,otherproject-api-key-234",
+```
 
-# Spin the service up in AWS
+#### Spin the service up in AWS
+```
 sls deploy
 ```
 
@@ -44,7 +53,7 @@ Serverless, Python 3.7, AWS S3, AWS Lambda
 ### Configuration
 
 #### Set or update your private key
-If you wish to change your private key, edit the `.env` file:
+If you wish to change your private key, edit `env.yml`:
 ```
 PRIVATE_JWT_KEY=ANY-STRING-DIFFICULT-TO-GUESS
 ```
@@ -55,7 +64,7 @@ The public key, needed for inspecting public data in tokens, will become
 accessable at the URL: `/public-key`
 
 #### Setting allowed consumers
-Set names of your consumers and add their unique API-keys by editing the `.env` file:
+Set names of your consumers and add their unique API-keys by editing `env.yml`:
 ```
 ALLOWED_PROJECTS=myproject-1e8c26c8-a0cc-45f6-9ec4-9d4b070d99c7
 ```

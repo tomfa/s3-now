@@ -21,6 +21,9 @@ provider:
   name: aws
   runtime: python3.7
 
+  stage: ${opt:stage, 'dev'}
+  environment: ${file(env.yml):${self:provider.stage}, file(env.yml):default}
+
 # you can overwrite defaults here
 #  stage: dev
 #  region: us-east-1
