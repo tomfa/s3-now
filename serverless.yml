@@ -26,7 +26,7 @@ provider:
 
 functions:
   json:
-    handler: storage.json_request
+    handler: api.json
     events:
       - http:
           path: json
