@@ -26,14 +26,18 @@ cp env-template.yml env.yml
 Update the `env.yml` file to set consumers and their api keys, in addition to a
 private key that will be used to encrypt JWT tokens.
 
+You'll also need to provide a bucket name.
+
 ```
 prod:
   PRIVATE_JWT_TOKEN: "you-should-most-definitely-replace-me"
-  ALLOWED_PROJECTS: "myproject-api-key-123",
+  ALLOWED_PROJECTS: "myproject-api-key-123"
+  S3_BUCKET: "my-bucket-name-prod"
 
 default:
   PRIVATE_JWT_TOKEN: "you-should-replace-me"
-  ALLOWED_PROJECTS: "myproject-api-key-123,otherproject-api-key-234",
+  ALLOWED_PROJECTS: "myproject-api-key-123,otherproject-api-key-234"
+  S3_BUCKET: "my-bucket-name-dev"
 ```
 
 #### Spin the service up in AWS
