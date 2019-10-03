@@ -4,18 +4,19 @@ import os
 from tempfile import TemporaryFile
 from typing import Any
 
-import boto3
+from boto3 import resource
 
 from botocore.exceptions import ClientError
 
 from src.dicts import get_key_value_from_dict, merge_dict_with_data
 
 
+JSON_LOCATION_KEY = "json"
+
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
-s3 = boto3.resource("s3").Bucket(os.environ.get("S3_BUCKET"))
-JSON_LOCATION_KEY = "json"
+s3 = resource("s3").Bucket(os.environ.get("S3_BUCKET"))
 
 
 def _get_absolute_file_key(project: str, *, key):
