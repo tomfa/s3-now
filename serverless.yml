@@ -16,6 +16,13 @@ provider:
   stage: ${opt:stage, 'dev'}
 
   environment: ${file(env.yml):${self:provider.stage}, file(env.yml):default}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - s3:PutObject
+        - s3:PutObjectAcl
+        - s3:GetObject
+      Resource: "arn:aws:s3:::${self:provider.environment.S3_BUCKET}/*"
 
 functions:
   json:

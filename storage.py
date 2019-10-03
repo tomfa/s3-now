@@ -1,5 +1,5 @@
+import boto3
 import json
-from json import JSONDecodeError
 import logging
 import os
 from typing import Dict, Optional
@@ -9,6 +9,8 @@ from exceptions import NotAuthenticated, InvalidPayload, MissingDataKey
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
+
+s3 = boto3.resource("s3").Bucket(os.environ.get("S3_BUCKET"))
 
 
 def project_lookup(key: str) -> Optional[str]:
@@ -52,18 +54,27 @@ def get_payload(event) -> Dict[any, any]:
     try:
         body = (event.get("body") or "").strip()
         return body and json.loads(body) or {}
-    except JSONDecodeError as ex:
+    except json.JSONDecodeError as ex:
         raise InvalidPayload(ex)
 
 
 def get_json_data(project: str, key: str):
     logger.info(f"Retrieving {project}.{key}")
-    return {"test": 1}
+    s3_response_object = s3.get_object(Key=project)
+    object_content = s3_response_object["Body"].read()
+    return json.loads(object_content)
 
 
 def set_json_data(project: str, key: str, data: Dict[any, any]):
     logger.info(f"Setting {project}.{key} to {data}")
-    return {"test": 1}
+    s3.put_object(
+        ACL="private",
+        ContentType="application/json",
+        Key=project,
+        Body=json.dumps(data),
+    )
+
+    return data
 
 
 def json_request(event, context):
