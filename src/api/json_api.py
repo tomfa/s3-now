@@ -1,7 +1,7 @@
 import json
 import logging
 
-from src import auth, requests, s3
+from src import s3, requests, auth
 from exceptions import NotAuthenticated, InvalidPayload, MissingDataKey
 
 
