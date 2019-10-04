@@ -48,7 +48,7 @@ def _get_request_auth_key(
 
 
 def authorize_request(event) -> str:
-    payload = requests.get_payload_from_event(event)
+    payload = requests.get_payload_from_request(event)
     params = event.get("queryStringParameters") or {}
     api_key = _get_request_auth_key(
         params=params, payload=payload, headers=event.get("headers") or {}

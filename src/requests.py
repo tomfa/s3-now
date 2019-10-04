@@ -9,7 +9,7 @@ logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 
-def get_payload_from_event(event) -> Dict[any, any]:
+def get_payload_from_request(event) -> Dict[any, any]:
     try:
         body = (event.get("body") or "").strip()
         return body and json.loads(body) or {}

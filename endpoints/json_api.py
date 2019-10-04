@@ -11,7 +11,7 @@ logger.setLevel(logging.INFO)
 
 def handler(event, context):
     try:
-        payload = requests.get_payload_from_event(event)
+        payload = requests.get_payload_from_request(event)
         params = event.get("queryStringParameters") or {}
         project = auth.authorize_request(event)
         key = params.get("key")
