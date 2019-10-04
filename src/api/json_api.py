@@ -19,9 +19,9 @@ def handler(event, context):
         if not key:
             raise MissingDataKey()
         if method == "GET":
-            data = s3.get_json_data_from_s3(project, key=key)
+            data = s3.get_json_data(project, key=key)
         elif method == "POST":
-            data = s3.set_json_data_in_s3(project, key, payload)
+            data = s3.set_json_data(project, key=key, data=payload)
         else:
             logger.error(f"Unknown method {method}")
             raise Exception(f"HTTP method {method} is not supported.")
