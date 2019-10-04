@@ -8,7 +8,7 @@ from boto3 import resource
 
 from botocore.exceptions import ClientError
 
-from src.dicts import get_key_value_from_dict, merge_dict_with_data
+from src.dicts import get_key_value_from_dict, set_dict_data
 
 
 JSON_LOCATION_KEY = "json"
@@ -42,7 +42,7 @@ def upload_file(data: bytes, *, project: str, content_type: str, key: str):
 def get_json_data_from_s3(project: str, *, key: str = "") -> Any:
     string_data = download_file_as_string(project, key=JSON_LOCATION_KEY)
     json_data = json.loads(string_data)
-    return get_key_value_from_dict(json_data, key=key)
+    return get_key_value_from_dict(json_data, keys=key.split("."))
 
 
 def set_json_data_in_s3(project: str, key: str, data: Any):
@@ -54,7 +54,7 @@ def set_json_data_in_s3(project: str, key: str, data: Any):
             "Generic botocore ClientError. Assuming missing key", exc_info=True
         )
         project_data = {}
-    new_data = merge_dict_with_data(project_data, key_path=key, data=data)
+    new_data = set_dict_data(project_data, keys=key.split("."), new_data=data)
     upload_file(
         json.dumps(new_data).encode(),
         project=project,

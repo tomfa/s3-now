@@ -1,35 +1,43 @@
 import logging
-from typing import Dict, Optional, Any
+from typing import Dict, Optional, Any, List
 
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 
-def get_key_value_from_dict(data: Dict, *, key: str) -> Optional[Dict]:
-    sub_keys = key and key.split(".") or []
+def get_key_value_from_dict(data: Dict, *, keys: List[str]) -> Optional[Dict]:
+    keys = keys or []
     pointer = data
-    for sub_key in sub_keys:
+    for sub_key in keys:
+        if sub_key == "":
+            continue
         if sub_key not in pointer:
             return None
         pointer = pointer[sub_key]
     return pointer
 
 
-def merge_dict_with_data(
-    dictionary: Optional[Dict], *, key_path: str, data: Any
+def _merge(dictionary: Dict, new_data: Any) -> Any:
+    if type(dictionary) != dict:
+        return new_data
+    if type(new_data) != dict:
+        return new_data
+    for key, value in new_data.items():
+        dictionary[key] = _merge(dictionary.get(key), value)
+    return dictionary
+
+
+def set_dict_data(
+    dictionary: Optional[Dict], *, keys: Optional[List] = None, new_data: Any
 ) -> Dict:
-    if not key_path:
-        # Overwrites everything
-        return data
+    if not keys:
+        return new_data
     dictionary = dictionary or {}
 
-    sub_keys = key_path.split(".")
-    last_key = sub_keys[-1]
-    pointer = dictionary
-    for sub_key in sub_keys[:-1]:
-        if sub_key not in pointer:
-            pointer[sub_key] = {}
-        pointer = pointer[sub_key]
-    pointer[last_key] = data
-    return pointer
+    first = keys[0]
+    remaining_keys = keys[1:]
+    dictionary[first] = set_dict_data(
+        dictionary.get(first), keys=remaining_keys, new_data=new_data
+    )
+    return dictionary
