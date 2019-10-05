@@ -1,3 +1,5 @@
+import json
+
 import pytest
 
 import exceptions
@@ -17,7 +19,7 @@ def test_authorize_accepts_auth_key_in_params(
 def test_authorize_accepts_auth_key_in_post_payload(
     api_key, project, request_builder
 ):
-    request = request_builder(body={"api-key": api_key})
+    request = request_builder(body=json.dumps({"api-key": api_key}))
 
     authorized_project = authorize_request(request)
 
@@ -39,7 +41,7 @@ def test_authorize_attempts_prioritizes_params(
 ):
     request = request_builder(
         params={"api-key": api_key},
-        body={"api-key": invalid_api_key},
+        body=json.dumps({"api-key": invalid_api_key}),
         headers={"Authorization": f"Bearer {invalid_api_key}"},
     )
 
@@ -52,7 +54,7 @@ def test_authorize_attempts_prioritizes_payload_over_header(
     api_key, project, request_builder, invalid_api_key
 ):
     request = request_builder(
-        body={"api-key": api_key},
+        body=json.dumps({"api-key": api_key}),
         headers={"Authorization": f"Bearer {invalid_api_key}"},
     )
 
@@ -64,7 +66,7 @@ def test_authorize_attempts_prioritizes_payload_over_header(
 def test_accepts_multiple_auth_projects(
     other_api_key, other_project, request_builder
 ):
-    request = request_builder(body={"api-key": other_api_key})
+    request = request_builder(body=json.dumps({"api-key": other_api_key}))
 
     authorized_project = authorize_request(request)
 
@@ -72,7 +74,7 @@ def test_accepts_multiple_auth_projects(
 
 
 def test_raises_on_invalid_auth_key(invalid_api_key, request_builder):
-    request = request_builder(body={"api-key": invalid_api_key})
+    request = request_builder(body=json.dumps({"api-key": invalid_api_key}))
 
     with pytest.raises(exceptions.NotAuthenticated):
         authorize_request(request)

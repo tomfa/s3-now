@@ -11,14 +11,15 @@ def request_builder() -> Callable:
         params: Dict[str, str] = None,
         method: Union[str] = "GET",
         headers: Optional[Dict] = None,
-        body: Optional[Any] = None,
+        body: Optional[str] = None,
     ) -> Dict:
         params = params or {}
         request = {"queryStringParameters": params, "httpMethod": method}
         if headers:
             request["headers"] = headers
         if body:
-            request["body"] = json.dumps(body)
+            assert type(body) == str, "Test request with non-string body"
+            request["body"] = body
         return request
 
     return fun
