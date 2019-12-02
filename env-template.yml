@@ -1,7 +1,9 @@
 prod:
   ALLOWED_PROJECTS: "dummyproject-api-key-123,otherproject-api-key-234"
   PRIVATE_JWT_TOKEN: "you-should-most-definitely-replace-me"
+  S3_BUCKET: "s3-now-storage-prod"
 
 default:
   ALLOWED_PROJECTS: "dummyproject-api-key-123"
   PRIVATE_JWT_TOKEN: "you-should-replace-me"
+  S3_BUCKET: "s3-now-storage-dev"

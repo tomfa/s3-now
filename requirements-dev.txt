@@ -1,1 +1,11 @@
+-r requirements.txt
+
+# formatting
 black==19.3b0
+
+# Unit testing
+pytest
+pytest-mock
+pytest-socket
+pytest-xdist
+pytest-env
